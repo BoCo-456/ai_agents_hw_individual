@@ -42,7 +42,7 @@ def run_prompt(request: PromptRequest):
         })
 
     formatted_context = "\n\n".join(context_chunks)
-    chat_model = ChatOpenAI(model="4UHRUIN-gpt-5-mini", temperature=0)
+    chat_model = ChatOpenAI(model="4UHRUIN-gpt-5-mini")
 
     system_content = SYSTEM_PROMPT.format(context=formatted_context)
     messages = [
