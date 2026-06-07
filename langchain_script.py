@@ -19,6 +19,7 @@ def process_and_upload(file_path: str, index_name: str):
     for _, row in df.iterrows():
         text_content = f"Title: {row['title']}\n\n{row['text']}"
         metadata = {
+            "title": str(row['title']),
             "url": str(row['url']),
             "authors": str(row['authors']),
             "tags": str(row['tags'])
