@@ -3,3 +3,5 @@ pydantic
 langchain-openai
 langchain-pinecone
 langchain-core
+pandas
+langchain-text-splitters

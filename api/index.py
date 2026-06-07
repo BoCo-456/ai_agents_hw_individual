@@ -21,7 +21,7 @@ def run_prompt(request: PromptRequest):
     embeddings = OpenAIEmbeddings(model="4UHRUIN-text-embedding-3-small")
     vectorstore = PineconeVectorStore(index_name="medium-rag-index", embedding=embeddings)
 
-    results = vectorstore.similarity_search_with_score(request.question, k=5)
+    results = vectorstore.similarity_search_with_score(request.question, k=10)
 
     context_chunks = []
     formatted_context_list = []
@@ -67,5 +67,5 @@ def get_stats():
     return {
         "chunk_size": 512,
         "overlap_ratio": 0.1,
-        "top_k": 5
+        "top_k": 10
     }
