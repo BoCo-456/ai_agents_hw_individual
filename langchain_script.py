@@ -1,5 +1,6 @@
 import os
-from langchain_community.document_loaders.csv_loader import CSVLoader
+import pandas as pd
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
@@ -12,8 +13,17 @@ os.environ["PINECONE_API_KEY"] = pinecone_api_key.read()
 
 
 def process_and_upload(file_path: str, index_name: str):
-    loader = CSVLoader(file_path=file_path)
-    data = loader.load()
+    df = pd.read_csv(file_path, encoding='utf-8', on_bad_lines='skip')
+
+    data = []
+    for _, row in df.iterrows():
+        text_content = f"Title: {row['title']}\n\n{row['text']}"
+        metadata = {
+            "url": str(row['url']),
+            "authors": str(row['authors']),
+            "tags": str(row['tags'])
+        }
+        data.append(Document(page_content=text_content, metadata=metadata))
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=512,
@@ -33,5 +43,5 @@ def process_and_upload(file_path: str, index_name: str):
 
 
 if __name__ == "__main__":
-    num_chunks = process_and_upload("val.csv", "your-pinecone-index-name")
+    num_chunks = process_and_upload("./val.csv", "medium-rag-index")
     print(f"Successfully uploaded {num_chunks} chunks to Pinecone.")
